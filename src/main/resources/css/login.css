@@ -1,0 +1,31 @@
+.root-pane {
+   -fx-background-image: url("../images/mist.jpeg");
+   -fx-background-repeat: repeat;
+   -fx-background-size: cover;
+   -fx-background-position: center center;
+}
+
+.label {
+   -fx-font-size: 16px;
+   -fx-font-weight: bolder;
+   -fx-text-fill: white;
+}
+
+#title-text {
+   -fx-font-size: 40px;
+   -fx-font-family: "Arial Rounded MT Bold";
+   -fx-fill: white;
+   -fx-font-weight: bold;
+}
+
+#actionTarget {
+   -fx-fill: red;
+   -fx-font-weight: bold;
+}
+
+.button {
+   -fx-text-fill: black;
+   -fx-background-color: white;
+   -fx-font-family: "Arial Narrow";
+   -fx-font-weight: bold;
+ }
