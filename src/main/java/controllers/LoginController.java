@@ -4,14 +4,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.Developer;
-import screen.DevScreen;
-import model.User;
+import model.Customer;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +31,8 @@ public class LoginController {
     public void handleLoginButtonAction() {
         String username = usernameField.getText();
         String password = passwordField.getText();
+        loginMessage.setFill(Color.WHITE);
+        loginMessage.setFont(Font.font("Verdana", 12));
 
         if (username == null || username.isEmpty()) {
             loginMessage.setText("Please type in a username!");
@@ -62,7 +64,7 @@ public class LoginController {
                         return;
                     }
                     if(credentials[3].equals("user")) {
-                        User.openUser(username, (Stage) usernameField.getScene().getWindow());
+                        Customer.openCustomer(username, (Stage) usernameField.getScene().getWindow());
 
                         return;
                     }
@@ -80,7 +82,7 @@ public class LoginController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        loginMessage.setText("We should register you!");
+        loginMessage.setText("Invalid username!");
         return;
 
     }
