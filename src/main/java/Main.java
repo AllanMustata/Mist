@@ -11,13 +11,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        DevScreen.Load_Dev_screen(primaryStage, "Gerald");
 
 
-        /*Parent root = FXMLLoader.load(getClass().getResource("fxml/login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("fxml/login.fxml"));
         primaryStage.setTitle("Mist");
         primaryStage.setScene(new Scene(root, 1600, 1000));
-        primaryStage.show();*/
+        primaryStage.show();
     }
 
 

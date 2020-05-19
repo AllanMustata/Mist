@@ -9,14 +9,22 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Modality;
 import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 
+
+
+
+import java.awt.*;
 import java.io.*;
 import java.lang.reflect.Array;
 import java.nio.file.Files;
@@ -38,13 +46,14 @@ public class DevScreen {
         //Reads all games
         Read_From_File(dev);
 
-
-
         primaryStage.setTitle("Mist- Developer Mode");
         Scene scene_default, scene_add, scene_view;
 
         //Layout for main dev page with view or add games
+
         Label label=new Label("Welcome, "+dev+" ,what would you like to do?");
+        label.setFont(new Font("Arial Rounded MT Bold", 30));
+        label.setStyle("-fx-font-weight: bold;");
 
         Button add_game_button=new Button("Add Game");
 
@@ -53,11 +62,32 @@ public class DevScreen {
         Button back_button1=new Button("Back");
         Button back_button2=new Button("Back");
 
-        VBox layout_main=new VBox(10);
+        Button quit_button=new Button("QUIT");
+        quit_button.setOnAction(e-> primaryStage.close());
 
-        layout_main.getChildren().addAll(label, add_game_button, view_games_button);
+        VBox layout_main=new VBox(30);
+
+        layout_main.getChildren().addAll(label, add_game_button, view_games_button,
+                quit_button);
         layout_main.setPadding(new Insets(10,10,10,10));
-        scene_default=new Scene(layout_main, 500,500);
+        layout_main.setAlignment(Pos.CENTER);
+
+        scene_default=new Scene(layout_main, 1200,800);
+
+        //Background for Main dev page
+        try {
+            FileInputStream input_img = new FileInputStream("src/main/resources/images/devtime.jpg");
+            Image image = new Image(input_img);
+            BackgroundImage bgi=new BackgroundImage(image,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.DEFAULT,
+                    BackgroundSize.DEFAULT);
+            Background main_dev_bg=new Background(bgi);
+            layout_main.setBackground(main_dev_bg);
+
+        }catch (IOException e){}
+
         back_button1.setOnAction(e-> primaryStage.setScene(scene_default));
 
 
@@ -65,14 +95,15 @@ public class DevScreen {
 
         //VBox layout_add=new VBox(10);
         Label label_add=new Label("Please input your game info:");
+        label_add.setFont(new Font("Arial Rounded MT Bold", 30));
 
         GridPane grid=new GridPane();
         grid.setPadding(new Insets(10,10,10,10));
         grid.setVgap(5);
         grid.setHgap(10);
 
-        GridPane.setConstraints(label_add, 0,0);
-        GridPane.setConstraints(back_button1, 0,1);
+        GridPane.setConstraints(label_add, 0,1);
+        GridPane.setConstraints(back_button1, 0,0);
 
         Label title_input=new Label("Game Title");
         GridPane.setConstraints(title_input, 0,2);
@@ -80,6 +111,9 @@ public class DevScreen {
         GridPane.setConstraints(genre_input, 0,3);
         Label price_input=new Label("Game Price");
         GridPane.setConstraints(price_input, 0,4);
+        title_input.setFont(new Font("Arial Rounded MT Bold", 20));
+        genre_input.setFont(new Font("Arial Rounded MT Bold", 20));
+        price_input.setFont(new Font("Arial Rounded MT Bold", 20));
 
         TextField pass_title=new TextField();
         pass_title.setPromptText("Title");
@@ -100,39 +134,58 @@ public class DevScreen {
         /*layout_add.getChildren().addAll(back_button1, label_add, title_input,
                 genre_input, price_input, pass_title, pass_genre, pass_price,
                 add_game_confirm_button);*/
+        grid.setAlignment(Pos.CENTER);
 
-        scene_add=new Scene(grid, 500, 500);
+        scene_add=new Scene(grid, 1200, 800);
+
+        try {
+            FileInputStream input_img_add = new FileInputStream("src/main/resources/images/addgametime.jpg");
+            Image image_add = new Image(input_img_add);
+            BackgroundImage bgi_add=new BackgroundImage(image_add,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.DEFAULT,
+                    BackgroundSize.DEFAULT);
+            Background add_dev_bg=new Background(bgi_add);
+            grid.setBackground(add_dev_bg);
+
+        }catch (IOException e){}
+
         add_game_button.setOnAction(e-> primaryStage.setScene(scene_add));
 
         add_game_confirm_button.setOnAction(event -> {
             if(Validate_Game_Info(pass_title.getText(), pass_genre.getText(),
                                                       pass_price.getText())) {
+                String title_wo_spaces=pass_title.getText();
+                title_wo_spaces.replaceAll("\\s", "");
                 game_aux=new Game();
-                game_aux.setTitle(pass_title.getText().replaceAll("\\s", ""));
+                game_aux.setTitle(title_wo_spaces);
                 game_aux.setGenre(pass_genre.getText());
                 game_aux.setPrice(Double.parseDouble(pass_price.getText()));
                 //Copies sold and rating will automatically be randomized
                 game_list.add(game_aux);
 
                 Popup.Display("Game uploaded",
-                        "Your game has been uploaded to out database");
+                        "Your game has been uploaded to out database" +
+                                ", please relog.");
 
                 try{
                     BufferedWriter writer=new BufferedWriter(new FileWriter(
                             "src/main/resources/database/GameList.db", true));
-                    writer.write(pass_title.getText().replaceAll("\\s","")
+
+                    writer.write(title_wo_spaces
                             +"\n"+dev+"\n");
                     writer.flush();
                     writer.close();
 
                     BufferedWriter game_writer=new BufferedWriter(new FileWriter(
                             "src/main/resources/database/"+
-                                    game_aux.getTitle()
+                                    title_wo_spaces
                                     +".db",
                             true));
 
                     game_writer.write(
-                            pass_title.getText().replaceAll("\\s","")
+                            pass_title.getText()
                             +"\n"+ pass_genre.getText()+
                             "\n"+pass_price.getText()+"\n"+game_aux.getCopies_sold()+
                             "\n"+game_aux.getRating()+"\n"+dev+"\n");
@@ -184,7 +237,9 @@ public class DevScreen {
 
 
         Label label_view=new Label("Here is the info about your games, "+dev);
+        label_view.setFont(new Font("Arial Rounded MT Bold", 30));
         Label edit_game_label=new Label("In case you'd like to edit your game");
+        edit_game_label.setFont(new Font("Arial Rounded MT Bold", 30));
         TextField pass_edit=new TextField();
         pass_edit.setPromptText("Name of game to edit");
         Button edit_button=new Button("Edit game");
@@ -192,6 +247,7 @@ public class DevScreen {
         label_view.setPadding(new Insets(10,10,10,10));
         layout_view.getChildren().addAll(label_view, back_button2, edit_game_label,
                 pass_edit, edit_button, table);
+        layout_view.setAlignment(Pos.CENTER);
 
         edit_button.setOnAction(e->{
 
@@ -200,7 +256,23 @@ public class DevScreen {
             Change_Stuff(pass_edit.getText(), dev);
         });
 
-        scene_view=new Scene(layout_view, 500, 500);
+        scene_view=new Scene(layout_view, 1600, 1200);
+
+        try {
+            FileInputStream input_view = new FileInputStream("src/main/resources/images/viewgamestime.jpeg");
+            Image image_view = new Image(input_view);
+            BackgroundImage bgi_view=new BackgroundImage(image_view,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.DEFAULT,
+                    BackgroundSize.DEFAULT);
+            Background view_dev_bg=new Background(bgi_view);
+            layout_view.setBackground(view_dev_bg);
+
+        }catch (IOException e){
+
+        }
+
         view_games_button.setOnAction(e-> primaryStage.setScene(scene_view));
 
 
@@ -230,6 +302,7 @@ public class DevScreen {
 
                         Label label=new Label("You may change "+game_title+
                                 "'s genre and price");
+                        label.setFont(new Font("Arial Rounded MT Bold", 30));
                         Button okbutton=new Button("OK");
 
                         TextField pass_new_genre=new TextField(g.getGenre());
@@ -238,7 +311,7 @@ public class DevScreen {
                         okbutton.setOnAction(e->{
                             g.setGenre(pass_new_genre.getText());
                             g.setPrice(Double.parseDouble(pass_new_price.getText()));
-                            Popup.Display("Game edited", "Please refresh the app to save changes");
+                            Popup.Display("Game edited", "Please relog to save changes");
                         });
 
                         VBox layout=new VBox(10);
@@ -246,7 +319,21 @@ public class DevScreen {
                                 pass_new_price, okbutton);
                         layout.setAlignment(Pos.CENTER);
 
-                        Scene scene=new Scene(layout, 300, 300);
+                        Scene scene=new Scene(layout, 1600, 1000);
+
+                        try {
+                            FileInputStream input_edit = new FileInputStream("src/main/resources/images/editgametime.jpg");
+                            Image image_view = new Image(input_edit);
+                            BackgroundImage bgi_edit=new BackgroundImage(image_view,
+                                    BackgroundRepeat.NO_REPEAT,
+                                    BackgroundRepeat.NO_REPEAT,
+                                    BackgroundPosition.DEFAULT,
+                                    BackgroundSize.DEFAULT);
+                            Background edit_dev_bg=new Background(bgi_edit);
+                            layout.setBackground(edit_dev_bg);
+
+                        }catch (IOException e){}
+
                         window.setScene(scene);
                         window.showAndWait();
 
@@ -314,6 +401,8 @@ public class DevScreen {
                     }
                     game_reader.close();
                 }
+                //Getting rid of the username
+                reader.hasNextLine();
             }
 
             reader.close();
