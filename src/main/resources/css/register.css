@@ -23,16 +23,17 @@
    -fx-font-weight: bold;
 }
 
-.button_login {
+.button_register {
    -fx-text-fill: black;
    -fx-background-color: white;
    -fx-font-family: "Arial Narrow";
    -fx-font-weight: bold;
  }
 
- .button_register {
+ .devCheckBox {
+    -fx-text-fill: white;
     -fx-text-fill: black;
-    -fx-background-color: white;
-    -fx-font-family: "Arial Narrow";
-    -fx-font-weight: bold;
-  }
+   -fx-background-color: white;
+   -fx-font-family: "Arial Narrow";
+   -fx-font-weight: bold;
+ }

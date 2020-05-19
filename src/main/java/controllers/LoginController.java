@@ -1,6 +1,10 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -79,5 +83,18 @@ public class LoginController {
         loginMessage.setText("We should register you!");
         return;
 
+    }
+
+    public void handleRegisterButtonAction() {
+        try {
+            Stage stage = (Stage) loginMessage.getScene().getWindow();
+//            File userDatabase = new File(getClass().getClassLoader().getResource("database/users.db").getFile());
+            Parent viewStudentsRoot = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/register.fxml"));
+//            Parent viewStudentsRoot = FXMLLoader.load(getClass().getResource("fxml/registers.fxml"));
+            Scene scene = new Scene(viewStudentsRoot, 1600, 1000);
+            stage.setScene(scene);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

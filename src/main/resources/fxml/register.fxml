@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Text?>
+<?import java.net.URL?>
+<GridPane xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="10" vgap="10" prefWidth="1600" prefHeight="1000"
+          xmlns="http://javafx.com/javafx"
+          fx:controller="controllers.RegisterController"
+          styleClass="root-pane">
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+    </padding>
+
+    <Text id="title-text" text="Mist" GridPane.columnIndex="0" GridPane.columnSpan="2"
+          GridPane.rowIndex="0"/>
+
+    <Label text="E-mail address:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+
+    <TextField fx:id="emailField" prefWidth="250" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+    <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+
+    <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+    <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+
+    <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+    <Label text="Repeat password:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+
+    <PasswordField fx:id="passwordFieldConfirm" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+    <HBox alignment="bottom_right" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="5">
+        <CheckBox fx:id="devCheckBox" textFill="white" text="Developer"/>
+        <Button fx:id="button_register" onAction="#handleRegisterButtonAction" text="Register"/>
+    </HBox>
+
+    <Text fx:id="loginMessage" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+    <stylesheets>
+        <URL value="@../css/register.css"/>
+    </stylesheets>
+</GridPane>
+
