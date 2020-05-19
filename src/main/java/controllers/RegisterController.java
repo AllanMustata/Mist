@@ -106,7 +106,6 @@ public class RegisterController {
                     userDatabase));
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
                 // read next line
                 String[] credentials = line.split(" ");
                 if(email.equals(credentials[0]))

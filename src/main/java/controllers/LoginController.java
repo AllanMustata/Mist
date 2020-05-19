@@ -52,7 +52,6 @@ public class LoginController {
                     userDatabase));
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
                 // read next line
                 String[] credentials = line.split(" ");
                 if(credentials[1].equals(username) && credentials[2].equals(password))
@@ -63,7 +62,7 @@ public class LoginController {
 
                         return;
                     }
-                    if(credentials[3].equals("user")) {
+                    if(credentials[3].equals("customer")) {
                         Customer.openCustomer(username, (Stage) usernameField.getScene().getWindow());
 
                         return;
