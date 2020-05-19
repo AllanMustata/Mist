@@ -1,3 +1,5 @@
+package model;
+
 public class Game {
     private String title;
     private String genre;

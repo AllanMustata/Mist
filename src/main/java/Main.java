@@ -1,31 +1,22 @@
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class Main  extends Application {
-    public static void main(String[] args)
-    {
-        System.out.println("Mist game selling app");
-        launch(args);
-    }
+public class Main extends Application {
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("fxml/login.fxml"));
+        primaryStage.setTitle("Mist");
+        primaryStage.setScene(new Scene(root, 1600, 1000));
+        primaryStage.show();
+    }
 
-        DevScreen.Load_Dev_screen(stage);
-
-        /*stage.setTitle("test for title");
-
-        Button button=new Button("button here");
-        button.setOnAction(e->PopupWindow.Display("Error", "Username or pasword wrong!"));
-
-        StackPane layout=new StackPane();
-        layout.getChildren().add(button);
-
-        Scene scene=new Scene(layout, 500, 500);
-        stage.setScene(scene);
-        stage.show();*/
+    public static void main(String[] args) {
+        launch(args);
     }
 }
