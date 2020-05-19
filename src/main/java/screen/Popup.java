@@ -1,14 +1,15 @@
+package screen;
+
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class PopupWindow {
+public class Popup {
     public static void Display(String title, String description){
         Stage window=new Stage();
 
