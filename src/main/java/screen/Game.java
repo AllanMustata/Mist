@@ -1,4 +1,4 @@
-package model;
+package screen;
 
 public class Game {
     private String title;
