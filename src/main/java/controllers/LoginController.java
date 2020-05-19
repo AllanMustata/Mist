@@ -4,7 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import model.Developer;
+import screen.DevScreen;
 import model.User;
 
 import java.io.File;
@@ -51,12 +53,12 @@ public class LoginController {
                 {
                     if(credentials[3].equals("dev"))
                     {
-                        Developer.openDev(username);
+                        Developer.openDev(username, (Stage) usernameField.getScene().getWindow());
 
                         return;
                     }
                     if(credentials[3].equals("user")) {
-                        User.openUser(username);
+                        User.openUser(username, (Stage) usernameField.getScene().getWindow());
 
                         return;
                     }

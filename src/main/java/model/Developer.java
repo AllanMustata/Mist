@@ -1,9 +1,12 @@
 package model;
 
+import javafx.stage.Stage;
+import screen.DevScreen;
+
 public class Developer {
-    public static void openDev(String devname)
+    public static void openDev(String devname, Stage primaryStage)
     {
-        System.out.println("This is " + devname);
+        DevScreen.Load_Dev_screen(primaryStage);
         return;
     }
 }
