@@ -7,8 +7,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -127,7 +127,7 @@ public class CustomerScreen {
         HBox button_box = new HBox(10);
         HBox hbox = new HBox(10);
         Label local_label = new Label("Game library");
-        local_label.setTextFill(Color.RED);
+        local_label.setTextFill(Color.BLACK);
         label_box.setAlignment(Pos.BASELINE_LEFT);
         label_box.getChildren().addAll(local_label);
         button_box.setAlignment(Pos.BASELINE_RIGHT);
@@ -219,6 +219,21 @@ public class CustomerScreen {
         table.setPlaceholder(new Label("No games owned!"));
         layout_main.setPadding(new Insets(10, 10, 10, 10));
         back_button.setOnAction(e-> stage.setScene(landingScene));
+
+        try {
+            FileInputStream input_view = new FileInputStream("src/main/resources/images/library_customer.jpeg");
+            Image image_view = new Image(input_view);
+            BackgroundImage bgi_view=new BackgroundImage(image_view,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.DEFAULT,
+                    new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true ,true ,true));
+            Background view_dev_bg=new Background(bgi_view);
+            layout_main.setBackground(view_dev_bg);
+        }catch(IOException except)
+        {
+            except.printStackTrace();
+        }
         libraryScene = new Scene(layout_main, 750, 750);
     }
 
@@ -334,6 +349,20 @@ public class CustomerScreen {
         storeTable.setPlaceholder(new Label("No games owned!"));
         layout_main.setPadding(new Insets(10, 10, 10, 10));
         back_button.setOnAction(e-> stage.setScene(landingScene));
+        try {
+            FileInputStream input_view = new FileInputStream("src/main/resources/images/store_customer.jpg");
+            Image image_view = new Image(input_view);
+            BackgroundImage bgi_view=new BackgroundImage(image_view,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.DEFAULT,
+                    new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true ,true ,true));
+            Background view_dev_bg=new Background(bgi_view);
+            layout_main.setBackground(view_dev_bg);
+        }catch(IOException except)
+        {
+            except.printStackTrace();
+        }
         storeScene = new Scene(layout_main, 1000, 750);
     }
 
@@ -504,13 +533,29 @@ public class CustomerScreen {
         back_button_box.setAlignment(Pos.TOP_LEFT);
         back_button_box.getChildren().addAll(back_button);
         Label label_card = new Label("Purchase credit with credit card");
-        label_card.setTextFill(Color.BLUE);
+        label_card.setTextFill(Color.WHITE);
+        label_card.setFont(new Font("Arial", 20));
         Label label_gift = new Label("Purchase credit with gift card");
-        label_gift.setTextFill(Color.BLUE);
+        label_gift.setTextFill(Color.WHITE);
+        label_gift.setFont(new Font("Arial", 20));
 
         secondary_layout.getChildren().addAll(label_card, amount_box, code_box, purchase_box, label_gift, gift_card_code_box, verify_box);
         main_layout.getChildren().addAll(back_button_box, secondary_layout);
         main_layout.setPadding(new Insets(10, 10, 10, 10));
+        try {
+            FileInputStream input_view = new FileInputStream("src/main/resources/images/mist.jpeg");
+            Image image_view = new Image(input_view);
+            BackgroundImage bgi_view=new BackgroundImage(image_view,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.DEFAULT,
+                    new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true ,true ,true));
+            Background view_dev_bg=new Background(bgi_view);
+            main_layout.setBackground(view_dev_bg);
+        }catch(IOException except)
+        {
+            except.printStackTrace();
+        }
         fundsScene = new Scene(main_layout, 500, 350);
     }
 
@@ -534,7 +579,21 @@ public class CustomerScreen {
         add_funds.setOnAction(e-> stage.setScene(fundsScene));
         vlayout.setPadding(new Insets(25, 25, 25, 25));
         vlayout.setAlignment(Pos.CENTER);
-        landingScene = new Scene(vlayout, 500, 300);
+        try {
+            FileInputStream input_view = new FileInputStream("src/main/resources/images/landing_customer.jpeg");
+            Image image_view = new Image(input_view);
+            BackgroundImage bgi_view=new BackgroundImage(image_view,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundRepeat.NO_REPEAT,
+                    BackgroundPosition.DEFAULT,
+                    new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true, true ,true ,true));
+            Background view_dev_bg=new Background(bgi_view);
+            vlayout.setBackground(view_dev_bg);
+        }catch(IOException except)
+        {
+            except.printStackTrace();
+        }
+        landingScene = new Scene(vlayout, 1280, 720);
 
     }
 
