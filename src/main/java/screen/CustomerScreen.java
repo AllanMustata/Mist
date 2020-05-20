@@ -41,12 +41,16 @@ public class CustomerScreen {
     private static void GetLibrary()
     {
         try {
-            File libraryDatabase = new File(CustomerScreen.class.getClassLoader().getResource("database/" + name + "_library.db").getFile());
+            File libraryDatabase = new File("src/main/resources/database/" + name + "_library.db");
             BufferedReader reader = new BufferedReader(new FileReader(
                     libraryDatabase));
             String line;
             while ((line = reader.readLine()) != null) {
                 Game game = new Game();
+                if(line == "\n")
+                {
+                    continue;
+                }
                 // read next line
                 String[] game_info = line.split(" ");
                 // title genre dev
@@ -75,7 +79,7 @@ public class CustomerScreen {
     private static void GetStore()
     {
         try {
-            File gameDatabase = new File(CustomerScreen.class.getClassLoader().getResource("database/gamelist.db").getFile());
+            File gameDatabase = new File("src/main/resources/database/GameList.db");
             BufferedReader reader = new BufferedReader(new FileReader(
                     gameDatabase));
             String line;
@@ -85,10 +89,12 @@ public class CustomerScreen {
                 game.setTitle(line);
                 devname = reader.readLine();
                 game.setDevname(devname);
-                File gameInfo = new File(CustomerScreen.class.getClassLoader().getResource("database/" + line.replaceAll("\\s","") + ".db").getFile());
+                File gameInfo = new File("src/main/resources/database/" + line.replaceAll("\\s","") + ".db");
                 BufferedReader gameInfoReader = new BufferedReader(new FileReader(
                         gameInfo));
                 String infoline;
+                infoline = gameInfoReader.readLine();
+                // game name
                 infoline = gameInfoReader.readLine();
                 // genre
                 game.setGenre(infoline);
@@ -159,7 +165,7 @@ public class CustomerScreen {
             if(game_rating < 1.00 || game_rating > 10.00)
             {
                 valid = false;
-                PopupWindow.Display("Error", "Rating must be between 1.00 and 10.00!", "OK");
+                Popup.Display("Error", "Rating must be between 1.00 and 10.00!", "OK");
             }
             if(valid) {
                 boolean found = false;
@@ -172,15 +178,17 @@ public class CustomerScreen {
                 }
 
                 if (!found) {
-                    PopupWindow.Display("Error", game_chosen + " is not owned!", "OK");
+                    Popup.Display("Error", game_chosen + " is not owned!", "OK");
                 } else {
                     for (Game game : store) {
                         if (game_chosen.equals(game.getTitle())) {
                             try {
-                                File gameInfo = new File(CustomerScreen.class.getClassLoader().getResource("database/" + game_chosen.replaceAll("\\s", "") + ".db").getFile());
+                                File gameInfo = new File("src/main/resources/database/" + game_chosen.replaceAll("\\s", "") + ".db");
                                 BufferedReader reader = new BufferedReader(new FileReader(gameInfo));
 
                                 String game_genre, game_price, game_num_ratings, game_avg_rating, game_devname;
+                                String game_title;
+                                game_title = reader.readLine();
                                 game_genre = reader.readLine();
                                 game_price = reader.readLine();
                                 game_num_ratings = reader.readLine();
@@ -193,11 +201,11 @@ public class CustomerScreen {
                                 avg_rating = Math.floor(avg_rating * 100) / 100;
 
                                 BufferedWriter writer = new BufferedWriter(new FileWriter(gameInfo, false));
-                                writer.write(game_genre + "\n" + game_price + "\n" + num_ratings + "\n" + avg_rating + "\n" + game_devname + "\n");
+                                writer.write(game_title + "\n" + game_genre + "\n" + game_price + "\n" + num_ratings + "\n" + avg_rating + "\n" + game_devname + "\n");
                                 writer.close();
                                 store.clear();
                                 CreateStoreScene(stage);
-                                PopupWindow.Display("Success", "Successfully rated " + game_chosen + "!", "Cool!");
+                                Popup.Display("Success", "Successfully rated " + game_chosen + "!", "Cool!");
                                 break;
                             } catch (IOException except) {
                                 except.printStackTrace();
@@ -281,7 +289,7 @@ public class CustomerScreen {
                     {
                         if(game_from_lib.getTitle().equals(game.getTitle()))
                         {
-                            PopupWindow.Display("Error", game.getTitle() + " is already owned!", "OK");
+                            Popup.Display("Error", game.getTitle() + " is already owned!", "OK");
                             valid = false;
                             break;
                         }
@@ -291,18 +299,18 @@ public class CustomerScreen {
                         if(game.getPrice() <= credit)
                         {
                             try {
-                                File userLibrary = new File(CustomerScreen.class.getClassLoader().getResource("database/" + name + "_library.db").getFile());
+                                File userLibrary = new File("src/main/resources/database/" + name + "_library.db");
                                 BufferedWriter writer = new BufferedWriter(new FileWriter(userLibrary, true));
                                 writer.write(game.getTitle() + " " + game.getGenre() + " " + game.getDevname() + "\n");
                                 writer.close();
 
-                                File userInfo = new File(CustomerScreen.class.getClassLoader().getResource("database/" + name + "_info.db").getFile());
+                                File userInfo = new File("src/main/resources/database/" + name + "_info.db");
                                 writer = new BufferedWriter(new FileWriter(userInfo, false));
                                 credit -= game.getPrice();
                                 credit = Math.floor(credit * 100) / 100;
                                 writer.write(Double.toString(credit) + "\n");
                                 writer.close();
-                                PopupWindow.Display("Success", "Successfully bought " + game.getTitle() + "!", "Cool!");
+                                Popup.Display("Success", "Successfully bought " + game.getTitle() + "!", "Cool!");
                                 library.clear();
                                 CreateLibraryScene(stage);
                                 CreateLandingScene(stage);
@@ -312,14 +320,14 @@ public class CustomerScreen {
                         }
                         else
                         {
-                            PopupWindow.Display("Error", "Insufficient funds!", "OK");
+                            Popup.Display("Error", "Insufficient funds!", "OK");
                         }
                     }
                 }
             }
             if(!found)
             {
-                PopupWindow.Display("Error", "Could not find game " + game_chosen  + "!", "OK");
+                Popup.Display("Error", "Could not find game " + game_chosen  + "!", "OK");
             }
         });
         layout_main.getChildren().addAll(hbox, storeTable, game_buy, buy_button);
@@ -346,13 +354,13 @@ public class CustomerScreen {
             if(money <= 0.0)
             {
                 valid = false;
-                PopupWindow.Display("Error", "Please input a positive amount!", "OK");
+                Popup.Display("Error", "Please input a positive amount!", "OK");
             }
 
             if(valid && code.length() != 12)
             {
                 valid = false;
-                PopupWindow.Display("Error", "Code must have 12 digits!", "OK");
+                Popup.Display("Error", "Code must have 12 digits!", "OK");
             }
 
             if(valid)
@@ -362,7 +370,7 @@ public class CustomerScreen {
                     if(code.charAt(i) < '0' || code.charAt(i) > '9')
                     {
                         valid = false;
-                        PopupWindow.Display("Error", "Code must be composed of digits only!", "OK", 400, 150);
+                        Popup.Display("Error", "Code must be composed of digits only!", "OK", 400, 150);
                         break;
                     }
                 }
@@ -371,31 +379,31 @@ public class CustomerScreen {
             if(valid && (code.charAt(1) <= code.charAt(0) || code.charAt(2) <= code.charAt(1) || code.charAt(3) <= code.charAt(2)))
             {
                 valid = false;
-                PopupWindow.Display("Error", "First 4 digits of code must be in ascending order!", "OK", 400, 150);
+                Popup.Display("Error", "First 4 digits of code must be in ascending order!", "OK", 400, 150);
             }
 
             if(valid && (code.charAt(4) >= '4' || (code.charAt(4) == '3' && code.charAt(5) > '1')))
             {
                 valid = false;
-                PopupWindow.Display("Error", "Last 8 digits must represent a valid date!", "OK", 400, 150);
+                Popup.Display("Error", "Last 8 digits must represent a valid date!", "OK", 400, 150);
             }
 
             if(valid && (code.charAt(6) >= '2' || (code.charAt(6) == '1' && code.charAt(7) > '2')))
             {
                 valid = false;
-                PopupWindow.Display("Error", "Last 8 digits must represent a valid date!", "OK", 400, 150);
+                Popup.Display("Error", "Last 8 digits must represent a valid date!", "OK", 400, 150);
             }
 
             if(valid && (code.charAt(8) > '2' || code.charAt(8) < '1'))
             {
                 valid = false;
-                PopupWindow.Display("Error", "Last 8 digits must represent a valid date!", "OK", 400, 150);
+                Popup.Display("Error", "Last 8 digits must represent a valid date!", "OK", 400, 150);
             }
 
             if(valid) {
                 credit += money;
                 try {
-                    File userInfo = new File(CustomerScreen.class.getClassLoader().getResource("database/" + name + "_info.db").getFile());
+                    File userInfo = new File("src/main/resources/database/" + name + "_info.db");
                     BufferedWriter writer = new BufferedWriter(new FileWriter(userInfo, false));
                     credit = Math.floor(credit * 100) / 100;
                     writer.write(Double.toString(credit) + "\n");
@@ -403,7 +411,7 @@ public class CustomerScreen {
                 } catch (IOException except) {
                     except.printStackTrace();
                 }
-                PopupWindow.Display("Success", money + " funds successfully added to account!", "Cool!");
+                Popup.Display("Success", money + " funds successfully added to account!", "Cool!");
                 CreateLandingScene(stage);
             }
         });
@@ -427,7 +435,7 @@ public class CustomerScreen {
             if(valid && code.length() != 8)
             {
                 valid = false;
-                PopupWindow.Display("Error", "Code must have 8 digits!", "OK");
+                Popup.Display("Error", "Code must have 8 digits!", "OK");
             }
 
             if(valid)
@@ -437,7 +445,7 @@ public class CustomerScreen {
                     if(code.charAt(i) < '0' || code.charAt(i) > '9')
                     {
                         valid = false;
-                        PopupWindow.Display("Error", "Code must be composed of digits only!", "OK", 400, 150);
+                        Popup.Display("Error", "Code must be composed of digits only!", "OK", 400, 150);
                         break;
                     }
                 }
@@ -447,7 +455,7 @@ public class CustomerScreen {
                 try {
                     boolean found = false;
                     double money = 0.0;
-                    File userDatabase = new File(CustomerScreen.class.getClassLoader().getResource("database/giftcards.db").getFile());
+                    File userDatabase = new File("src/main/resources/database/giftcards.db");
                     BufferedReader reader = new BufferedReader(new FileReader(
                             userDatabase));
                     String line;
@@ -466,17 +474,17 @@ public class CustomerScreen {
                     reader.close();
                     if(found) {
                         credit += money;
-                        File userInfo = new File(CustomerScreen.class.getClassLoader().getResource("database/" + name + "_info.db").getFile());
+                        File userInfo = new File("src/main/resources/database/" + name + "_info.db");
                         BufferedWriter writer = new BufferedWriter(new FileWriter(userInfo, false));
                         credit = Math.floor(credit * 100) / 100;
                         writer.write(Double.toString(credit) + "\n");
                         writer.close();
                         CreateLandingScene(stage);
-                        PopupWindow.Display("Success", money + " funds successfully added to account!", "Cool!", 400, 150);
+                        Popup.Display("Success", money + " funds successfully added to account!", "Cool!", 400, 150);
                     }
                     else
                     {
-                        PopupWindow.Display("Error", "Gift card was not found in the database!", "OK", 400, 150);
+                        Popup.Display("Error", "Gift card was not found in the database!", "OK", 400, 150);
                     }
                 } catch (IOException except) {
                     except.printStackTrace();
@@ -534,7 +542,7 @@ public class CustomerScreen {
         primaryStage.setTitle("Mist - " + username);
         name = username;
         try{
-            File customerInfo = new File(CustomerScreen.class.getClassLoader().getResource("database/" + username + "_info.db").getFile());
+            File customerInfo = new File("src/main/resources/database/" + username + "_info.db");
             BufferedReader customerInfoReader = new BufferedReader(new FileReader(
                     customerInfo));
             String line;
@@ -543,77 +551,6 @@ public class CustomerScreen {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-//        Scene scene_default, scene_add, scene_view;
-//
-//        //Layout for main dev page with view or add games
-////        Label label=new Label("Welcome, what would you like to do?");
-//
-//        Button add_game_button=new Button("Add Game");
-//
-//        Button view_games_button=new Button("View My Games");
-//
-//        Button back_button1=new Button("Back");
-//        Button back_button2=new Button("Back");
-//
-//        VBox layout_main=new VBox(10);
-//        layout_main.getChildren().addAll(label, add_game_button, view_games_button);
-//        scene_default=new Scene(layout_main, 500,500);
-//        back_button1.setOnAction(e-> primaryStage.setScene(scene_default));
-//        back_button2.setOnAction(e-> primaryStage.setScene(scene_default));
-//
-//
-//        //Layout for add game
-//
-//        //VBox layout_add=new VBox(10);
-//        Label label_add=new Label("Please input your game info:");
-//
-//        GridPane grid=new GridPane();
-//        grid.setPadding(new Insets(10,10,10,10));
-//        grid.setVgap(5);
-//        grid.setHgap(10);
-//
-//        GridPane.setConstraints(label_add, 0,0);
-//        GridPane.setConstraints(back_button1, 0,1);
-//
-//        Label title_input=new Label("Game Title");
-//        GridPane.setConstraints(title_input, 0,2);
-//        Label genre_input=new Label("Game Genre");
-//        GridPane.setConstraints(genre_input, 0,3);
-//        Label price_input=new Label("Game Price");
-//        GridPane.setConstraints(price_input, 0,4);
-//
-//        TextField pass_title=new TextField();
-//        pass_title.setPromptText("Title");
-//        TextField pass_genre=new TextField();
-//        pass_genre.setPromptText("Genre");
-//        TextField pass_price=new TextField();
-//        pass_price.setPromptText("Price");
-//        GridPane.setConstraints(pass_title, 1,2);
-//        GridPane.setConstraints(pass_genre, 1,3);
-//        GridPane.setConstraints(pass_price, 1,4);
-//
-//        Button add_game_confirm_button=new Button("Add Game");
-//        GridPane.setConstraints(add_game_confirm_button, 1,5);
-//
-//        grid.getChildren().addAll(back_button1, label_add, title_input,
-//                genre_input, price_input, pass_title, pass_genre, pass_price,
-//                add_game_confirm_button);
-//        /*layout_add.getChildren().addAll(back_button1, label_add, title_input,
-//                genre_input, price_input, pass_title, pass_genre, pass_price,
-//                add_game_confirm_button);*/
-//
-//        scene_add=new Scene(grid, 500, 500);
-//        add_game_button.setOnAction(e-> primaryStage.setScene(scene_add));
-//
-//
-//        //Layout for view games
-//
-//        VBox layout_view=new VBox(10);
-//        Label label_view=new Label("Not yet either, check vid for table");
-//        layout_view.getChildren().addAll(label_view, back_button2);
-//        scene_view=new Scene(layout_view, 500, 500);
-//        view_games_button.setOnAction(e-> primaryStage.setScene(scene_view));
 
         CreateLibraryScene(primaryStage);
         CreateStoreScene(primaryStage);

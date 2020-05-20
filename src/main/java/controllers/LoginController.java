@@ -47,7 +47,7 @@ public class LoginController {
         // see if user is registered by checking the database file
         BufferedReader reader;
         try {
-            File userDatabase = new File(getClass().getClassLoader().getResource("database/users.db").getFile());
+            File userDatabase = new File("src/main/resources/database/users.db");
             reader = new BufferedReader(new FileReader(
                     userDatabase));
             String line;
@@ -89,10 +89,8 @@ public class LoginController {
     public void handleRegisterButtonAction() {
         try {
             Stage stage = (Stage) loginMessage.getScene().getWindow();
-//            File userDatabase = new File(getClass().getClassLoader().getResource("database/users.db").getFile());
-            Parent viewStudentsRoot = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/register.fxml"));
-//            Parent viewStudentsRoot = FXMLLoader.load(getClass().getResource("fxml/registers.fxml"));
-            Scene scene = new Scene(viewStudentsRoot, 1600, 1000);
+            Parent registerScreen = FXMLLoader.load(getClass().getClassLoader().getResource("fxml/register.fxml"));
+            Scene scene = new Scene(registerScreen, 1600, 1000);
             stage.setScene(scene);
         } catch (IOException e) {
             e.printStackTrace();
