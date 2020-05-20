@@ -1,5 +1,7 @@
 package screen;
 
+import java.util.Random;
+
 public class Game {
     private String title;
     private String genre;
