@@ -7,7 +7,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import screen.PopupWindow;
+import screen.Popup;
 import javafx.stage.Stage;
 import model.Developer;
 import model.Customer;
@@ -101,12 +101,11 @@ public class RegisterController {
         // see if user is registered by checking the database file
         BufferedReader reader;
         try {
-            File userDatabase = new File(getClass().getClassLoader().getResource("database/users.db").getFile());
+            File userDatabase = new File("src/main/resources/database/users.db");
             reader = new BufferedReader(new FileReader(
                     userDatabase));
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
                 // read next line
                 String[] credentials = line.split(" ");
                 if(email.equals(credentials[0]))
@@ -122,11 +121,20 @@ public class RegisterController {
                 }
             }
             reader.close();
+            File userInfo = new File("src/main/resources/database/" + username + "_info.db");
+            BufferedWriter writer = new BufferedWriter(new FileWriter(userInfo, true));
+            writer.write("0.0\n");
+            writer.flush();
+            writer.close();
 
-//            loginMessage.setText("Successfully registered! Logging in...");
-            PopupWindow.Display("Registered", "Successfully registered!", "Log In");
+            File userLibrary = new File("src/main/resources/database/" + username + "_library.db");
+            writer = new BufferedWriter(new FileWriter(userLibrary, true));
+            writer.flush();
+            writer.close();
 
-            BufferedWriter writer = new BufferedWriter(new FileWriter(userDatabase, true));
+            Popup.Display("Registered", "Successfully registered!", "Log In");
+
+            writer = new BufferedWriter(new FileWriter(userDatabase, true));
             String accountType = (devCheckBox.isSelected()) ? "dev" : "customer";
             writer.write(email + " " + username + " " + password + " " + accountType + "\n");
             writer.flush();
